@@ -4,10 +4,11 @@ export const speech = {
 	prompt: (questions) =>
 		new Promise((resolve, reject) => {
 			handleQuestion(questions[0]).then(answer => {
+				const answerHash = {[questions[0].name]: answer};
 				if (questions.length > 1) {
-					speech.prompt(questions.slice(1)).then(answers => resolve([answer].concat(answers)));
+					speech.prompt(questions.slice(1)).then(answers => resolve({...answerHash, ...answers}));
 				} else {
-					resolve([answer]);
+					resolve(answerHash);
 				}
 			});
 		})

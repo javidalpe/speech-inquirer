@@ -30,6 +30,24 @@ speechInquirer
   });
 ```
 
+### Example
+```js
+var speechInquirer = require('speech-inquirer');
+speechInquirer
+  .prompt([{
+	type: "list",
+	name: "color",
+	message: "Choose a color",
+	choice: [
+		"red",
+		"green"
+	]	
+  }])
+  .then(answers => {
+    alert(answers.color);
+  });
+```
+
 # Plugins
 
 # Contributing
