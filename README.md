@@ -30,6 +30,8 @@ speechInquirer
   });
 ```
 
+> [Chrome Deprecation] speechSynthesis.speak() without user activation is deprecated and will be removed in M71, around December 2018. See https://www.chromestatus.com/features/5687444770914304 for more details.
+
 ### Example
 ```js
 var speechInquirer = require('speech-inquirer');

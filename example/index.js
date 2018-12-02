@@ -1,24 +1,26 @@
 document.addEventListener("click", () =>
-	SpeechInquirer.speech
-		.prompt([{
-			type: "list",
-			name: "color",
-			message: "¿Cual es tu color favorito?",
-			choice: [
-				"rojo",
-				"azul",
-				"verde"
-			]
-		},
+	speechInquirer
+		.prompt([
+
+			{
+				type: "input",
+				name: "name",
+				message: "¿Cual es tu nombre?"
+			},
 			{
 				type: "list",
-				name: "ciudad",
-				message: "¿En qué ciudad vives?",
+				name: "color",
+				message: "¿Cual es tu color favorito?",
 				choice: [
-					"Madrid",
-					"Barcelona",
-					"Oviedo"
+					"rojo",
+					"azul",
+					"verde"
 				]
+			},
+			{
+				type: "confirm",
+				name: "confirm",
+				message: "¿Guardar cambios?"
 			}
 		])
 		.then(answers => {

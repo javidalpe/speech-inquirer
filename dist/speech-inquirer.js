@@ -1,13 +1,22 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
 
-const speech = {
-	prompt: (questions) =>
-		new Promise((resolve, reject) => {
-			handleQuestion(questions[0]).then(answer => {
+class SpeechEnquirer {
+	constructor() {
+		this.questions = {};
+	}
+
+	prompt(questions) {
+		return new Promise((resolve, reject) => {
+			const firstQuestion = questions[0];
+			if (!firstQuestion.hasOwnProperty('type'))
+				throw Error("The question type is required");
+			if (!this.questions.hasOwnProperty(firstQuestion.type))
+				throw Error("Question type not recognized");
+
+			const handler = this.questions[firstQuestion.type];
+			handler(firstQuestion).then(answer => {
 				const answerHash = {[questions[0].name]: answer};
 				if (questions.length > 1) {
 					speech.prompt(questions.slice(1)).then(answers => resolve({...answerHash, ...answers}));
@@ -15,10 +24,16 @@ const speech = {
 					resolve(answerHash);
 				}
 			});
-		})
-};
+		});
+	}
 
-const handleQuestion = (question) => new Promise((resolve, reject) => {
+	registerQuestion(type, handler) {
+		this.questions[type] = handler;
+	}
+}
+
+
+const handleListQuestion = (question) => new Promise((resolve, reject) => {
 	console.log(question);
 	const menu = question.choice.map((o, i) => `${i + 1}, ${o}. `).join('\n');
 	speak(`${question.message}:\n${menu}`).then(() =>
@@ -29,12 +44,47 @@ const handleQuestion = (question) => new Promise((resolve, reject) => {
 				speak("Lo siento, no te he entendido.")
 					.then(() => {
 						console.log("Otro prompt");
-						handleQuestion(question).then(command => resolve(command));
+						handleListQuestion(question).then(command => resolve(command));
 					});
 			}
 		})
 	);
 });
+
+const handleConfirmQuestion = (question) => new Promise((resolve, reject) => {
+	console.log(question);
+	const menu = `${question.message}. Diga: aceptar o cancelar.`;
+	speak(menu).then(() =>
+		listen().then(command => {
+			if (['aceptar', 'cancelar'].includes(command)) {
+				resolve(command);
+			} else {
+				speak("Lo siento, no te he entendido.")
+					.then(() => {
+						console.log("Otro prompt");
+						handleConfirmQuestion(question).then(command => resolve(command));
+					});
+			}
+		})
+	);
+});
+
+const handleInput = (question) => new Promise((resolve, reject) => {
+	speak(question.message).then(() =>
+		listen().then(command => {
+			if (command.length) {
+				resolve(command);
+			} else {
+				speak("Lo siento, no te he entendido.")
+					.then(() => {
+						console.log("Otro prompt");
+						handleInput(question).then(command => resolve(command));
+					});
+			}
+		})
+	);
+});
+
 
 const listen = () => new Promise((resolve, reject) => {
 	const recognition = new window.SpeechRecognition();
@@ -69,4 +119,9 @@ const speak = (text) => new Promise((resolve, reject) => {
 	window.speechSynthesis.speak(utterance);
 });
 
-exports.speech = speech;
+const speech = new SpeechEnquirer();
+speech.registerQuestion("list", handleListQuestion);
+speech.registerQuestion("confirm", handleConfirmQuestion);
+speech.registerQuestion("input", handleInput);
+
+module.exports = speech;

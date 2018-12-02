@@ -7,7 +7,7 @@ module.exports = {
 	{
 		file: 'dist/speech-inquirer.min.js',
 		format: 'iife',
-		name: "SpeechInquirer"
+		name: "speechInquirer"
 	},
 	]
 };
