@@ -1,0 +1,28 @@
+{
+  "name": "speech-inquirer",
+  "version": "1.0.0",
+  "description": "A speech interface for website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "inquirer",
+    "speech",
+    "speech-api",
+    "speech-recognition-api"
+  ],
+  "author": "Javier Vidal",
+  "license": "MIT",
+  "directories": {
+    "example": "example"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/javidalpe/speech-inquirer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/javidalpe/speech-inquirer/issues"
+  },
+  "homepage": "https://github.com/javidalpe/speech-inquirer#readme"
+}
