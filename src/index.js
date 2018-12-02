@@ -55,7 +55,7 @@ const handleConfirmQuestion = (question) => new Promise((resolve, reject) => {
 	speak(menu).then(() =>
 		listen().then(command => {
 			if (['aceptar', 'cancelar'].includes(command)) {
-				resolve(command);
+				resolve(command === 'aceptar');
 			} else {
 				speak("Lo siento, no te he entendido.")
 					.then(() => {
@@ -93,15 +93,15 @@ const listen = () => new Promise((resolve, reject) => {
 	recognition.maxAlternatives = 1;
 	recognition.onresult = (event) => {
 		const command = event.results[0][0].transcript;
-		console.log("Escucha: " + command);
+		console.log("Listened: " + command);
 		resolve(command);
 	};
 	recognition.onnomatch = () => {
-		console.log("No ecucha:");
+		console.log("No match.");
 		resolve("");
 	};
 	recognition.onerror = () => {
-		console.log("Error:");
+		console.log("Error.");
 		resolve("");
 	};
 	recognition.start();
@@ -111,9 +111,9 @@ const speak = (text) => new Promise((resolve, reject) => {
 	const utterance = new SpeechSynthesisUtterance();
 	utterance.text = text;
 	utterance.onend = () => {
-		console.log("Habla: " + text);
 		resolve();
 	};
+	console.log("Speak: " + text);
 	window.speechSynthesis.speak(utterance);
 });
 
