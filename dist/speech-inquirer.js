@@ -1,6 +1,10 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
 window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
 
-export const speech = {
+const speech = {
 	prompt: (questions) =>
 		new Promise((resolve, reject) => {
 			handleQuestion(questions[0]).then(answer => {
@@ -19,16 +23,16 @@ const handleQuestion = (question) => new Promise((resolve, reject) => {
 	speak(`${question.message}:\n${menu}`).then(() =>
 		listen().then(command => {
 			if (question.choice.includes(command)) {
-				resolve(command)
+				resolve(command);
 			} else {
 				speak("Lo siento, no te he entendido.")
 					.then(() => {
 						console.log("Otro prompt");
-						handleQuestion(question).then(command => resolve(command))
+						handleQuestion(question).then(command => resolve(command));
 					});
 			}
 		})
-	)
+	);
 });
 
 const listen = () => new Promise((resolve, reject) => {
@@ -52,7 +56,7 @@ const listen = () => new Promise((resolve, reject) => {
 		resolve("");
 	};
 	recognition.start();
-})
+});
 
 const speak = (text) => new Promise((resolve, reject) => {
 	const utterance = new SpeechSynthesisUtterance();
@@ -62,4 +66,6 @@ const speak = (text) => new Promise((resolve, reject) => {
 		resolve();
 	};
 	window.speechSynthesis.speak(utterance);
-})
+});
+
+exports.speech = speech;

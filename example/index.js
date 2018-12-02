@@ -1,5 +1,5 @@
 document.addEventListener("click", () =>
-	speech
+	SpeechInquirer.speech
 		.prompt([{
 			type: "list",
 			name: "color",

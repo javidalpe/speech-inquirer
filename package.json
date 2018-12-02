@@ -2,9 +2,11 @@
   "name": "speech-inquirer",
   "version": "1.0.0",
   "description": "A speech interface for website",
-  "main": "index.js",
+  "main": "dist/speech-inquirer.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "rollup": "rollup --config",
+    "watch": "rollup --config --watch"
   },
   "keywords": [
     "inquirer",
